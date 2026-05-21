@@ -3,6 +3,10 @@ import { AuthProvider } from './contexts/AuthContext';
 import Login from './pages/Login';
 import Cadastro from './pages/Cadastro';
 import Dashboard from './pages/Dashboard';
+import Layout from './components/Layout';
+import PacientesListagem from './pages/PacientesListagem';
+import PacientesCadastro from './pages/PacientesCadastro';
+import PacientePerfil from './pages/PacientePerfil';
 
 function App() {
   return (
@@ -12,7 +16,15 @@ function App() {
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          
+          {/* Rotas Protegidas com Menu Lateral Sidebar */}
+          <Route element={<Layout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/pacientes" element={<PacientesListagem />} />
+            <Route path="/pacientes/novo" element={<PacientesCadastro />} />
+            <Route path="/pacientes/:id" element={<PacientePerfil />} />
+          </Route>
+
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
