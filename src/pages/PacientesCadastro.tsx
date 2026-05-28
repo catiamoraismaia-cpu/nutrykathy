@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { User, Stethoscope, Leaf, ArrowLeft, CheckCircle } from 'lucide-react';
+import FruitLoader from '../components/FruitLoader';
 
 // --- Opções de múltipla escolha ---
 const OPCOES_OBJETIVOS = ['Emagrecer', 'Ganhar massa', 'Controlar diabetes', 'Saúde geral', 'Performance esportiva', 'Reeducação alimentar'];
@@ -228,6 +229,7 @@ export default function PacientesCadastro() {
 
   return (
     <main className="page-content">
+      {salvando && <FruitLoader mensagem="Cadastrando paciente..." />}
       {/* Toast de sucesso */}
       {toast && (
         <div className="toast">

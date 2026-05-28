@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { Mail, Lock, AlertCircle, Leaf } from 'lucide-react';
+import FruitLoader from '../components/FruitLoader';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -50,6 +51,7 @@ export default function Login() {
 
   return (
     <div className="auth-layout">
+      {isLoading && <FruitLoader mensagem="Entrando no consultório..." />}
       <div className="auth-card glass-panel">
         <div className="brand-header">
           <div className="brand-logo">

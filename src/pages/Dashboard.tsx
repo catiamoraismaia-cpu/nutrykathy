@@ -8,7 +8,10 @@ import {
   UserMinus,
   ChevronRight,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Stethoscope,
+  User,
+  FileText
 } from 'lucide-react';
 
 interface PacienteSemRetorno {
@@ -153,6 +156,30 @@ export default function Dashboard() {
           <span>{error}</span>
         </div>
       )}
+
+      {/* Atalhos de Acesso Rápido */}
+      <section className="quick-actions-grid">
+        <Link to="/pacientes" className="action-card">
+          <div className="action-icon-wrapper">
+            <Stethoscope size={24} />
+          </div>
+          <span className="action-title">Consulta</span>
+        </Link>
+
+        <Link to="#" className="action-card">
+          <div className="action-icon-wrapper">
+            <User size={24} />
+          </div>
+          <span className="action-title">Nutricionista</span>
+        </Link>
+
+        <Link to="/pacientes" className="action-card">
+          <div className="action-icon-wrapper">
+            <FileText size={24} />
+          </div>
+          <span className="action-title">Planos Alimentares</span>
+        </Link>
+      </section>
 
       {/* Grid de Cards de Estatísticas */}
       <div className="stats-grid">

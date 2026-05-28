@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import { Plus, Search, Calendar, ChevronRight, Users } from 'lucide-react';
+import { Plus, Search, Calendar, ChevronRight, Users, Dumbbell, Apple, Heart, Activity, Target } from 'lucide-react';
 
 interface Paciente {
   id: string;
@@ -80,87 +80,225 @@ export default function PacientesListagem() {
     return `${dia}/${mes}/${ano}`;
   };
 
-  const formatarObjetivos = (objetivos: string[] | null) => {
-    if (!objetivos || objetivos.length === 0) return '—';
-    if (objetivos.length === 1) return objetivos[0];
-    return objetivos[0] + (objetivos.length > 1 ? ` +${objetivos.length - 1}` : '');
-  };
+  // Métricas rápidas dinâmicas
+  const totalPacientes = pacientes.length;
+  const focoEx = pacientes.filter(p => 
+    p.objetivos?.some(obj => 
+      obj.toLowerCase().includes('massa') || 
+      obj.toLowerCase().includes('esport') || 
+      obj.toLowerCase().includes('performance') || 
+      obj.toLowerCase().includes('hipertrofia')
+    )
+  ).length;
+  const focoNutri = pacientes.filter(p => 
+    p.objetivos?.some(obj => 
+      obj.toLowerCase().includes('emagrecer') || 
+      obj.toLowerCase().includes('alimentar') || 
+      obj.toLowerCase().includes('diabetes') || 
+      obj.toLowerCase().includes('saúde')
+    )
+  ).length;
 
   return (
-    <main className="page-content">
-      {/* Cabeçalho */}
-      <header className="page-header">
-        <div>
-          <h1 className="page-title">Pacientes</h1>
-          <p className="page-subtitle">Gerencie todos os seus pacientes cadastrados</p>
+    <main className="page-content futuristic-patients-view">
+      {/* Background Cyber Grid & Glow Spots */}
+      <div className="cyber-grid-overlay" />
+      <div className="cyber-glow-spot-1" />
+      <div className="cyber-glow-spot-2" />
+
+      {/* Floating Particles (Nutrition & Exercise themes) */}
+      <div className="floating-particles-container">
+        <span className="nutrient-particle" style={{ top: '15%', left: '8%', animationDuration: '22s', fontSize: '1.25rem' }}>🍃</span>
+        <span className="nutrient-particle" style={{ top: '45%', left: '92%', animationDuration: '28s', fontSize: '1.5rem' }}>💪</span>
+        <span className="nutrient-particle" style={{ top: '75%', left: '5%', animationDuration: '25s', fontSize: '1.3rem' }}>🍎</span>
+        <span className="nutrient-particle" style={{ top: '80%', left: '85%', animationDuration: '20s', fontSize: '1.1rem' }}>🏃</span>
+        <span className="nutrient-particle" style={{ top: '30%', left: '75%', animationDuration: '32s', fontSize: '1.4rem' }}>🍋</span>
+        <span className="nutrient-particle" style={{ top: '60%', left: '15%', animationDuration: '24s', fontSize: '1.6rem' }}>🏋️</span>
+        <span className="nutrient-particle" style={{ top: '10%', left: '60%', animationDuration: '30s', fontSize: '1.2rem' }}>🥗</span>
+      </div>
+
+      {/* Cabeçalho Futurista */}
+      <header className="futuristic-header">
+        <div className="futuristic-title-area">
+          <h1>Pacientes</h1>
+          <p>Mapeamento Biométrico & Acompanhamento</p>
         </div>
-        <Link to="/pacientes/novo" className="btn-action">
+        <Link to="/pacientes/novo" className="btn-action btn-cyber-action">
           <Plus size={18} />
-          Novo Paciente
+          Cadastrar Paciente
         </Link>
       </header>
 
-      {/* Controles */}
-      <div className="patients-controls">
-        <div className="search-bar">
-          <Search className="search-icon" />
+      {/* Hologram Stats Dashboard */}
+      <section className="hologram-stats-grid">
+        <div className="hologram-stat-card">
+          <div className="hologram-stat-header">
+            <span className="hologram-stat-title">Monitoramento Geral</span>
+            <div className="hologram-stat-icon">
+              <Users size={18} />
+            </div>
+          </div>
+          <div className="hologram-stat-value">{isLoading ? '...' : totalPacientes}</div>
+          <div className="hologram-stat-footer">
+            <Activity size={12} />
+            <span>Pacientes cadastrados</span>
+          </div>
+        </div>
+
+        <div className="hologram-stat-card">
+          <div className="hologram-stat-header">
+            <span className="hologram-stat-title">Performance & Força</span>
+            <div className="hologram-stat-icon">
+              <Dumbbell size={18} />
+            </div>
+          </div>
+          <div className="hologram-stat-value">{isLoading ? '...' : focoEx}</div>
+          <div className="hologram-stat-footer">
+            <Target size={12} />
+            <span>Foco em exercícios e hipertrofia</span>
+          </div>
+        </div>
+
+        <div className="hologram-stat-card">
+          <div className="hologram-stat-header">
+            <span className="hologram-stat-title">Nutrição & Saúde</span>
+            <div className="hologram-stat-icon">
+              <Apple size={18} />
+            </div>
+          </div>
+          <div className="hologram-stat-value">{isLoading ? '...' : focoNutri}</div>
+          <div className="hologram-stat-footer">
+            <Heart size={12} />
+            <span>Foco em reeducação e emagrecimento</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Controles cibernéticos */}
+      <div className="cyber-controls">
+        <div className="cyber-search-bar">
           <input
             id="busca-pacientes"
             type="text"
-            className="search-input"
-            placeholder="Buscar por nome..."
+            className="cyber-search-input"
+            placeholder="Filtrar por nome de paciente..."
             value={filtro}
             onChange={e => setFiltro(e.target.value)}
           />
+          <Search className="cyber-search-icon" size={18} />
         </div>
-        <span style={{ fontSize: '0.875rem', color: 'var(--color-text-light)', fontWeight: 500 }}>
-          {isLoading ? '...' : `${pacientesFiltrados.length} paciente${pacientesFiltrados.length !== 1 ? 's' : ''}`}
+        <span className="cyber-results-count">
+          {isLoading ? 'Escaneando...' : `${pacientesFiltrados.length} Registro(s)`}
         </span>
       </div>
 
-      {/* Tabela */}
+      {/* Cards ou Loader */}
       {isLoading ? (
-        <div className="patients-table">
-          {[1, 2, 3, 4].map(i => (
-            <div key={i} style={{ padding: '1.15rem 1.5rem', borderBottom: '1px solid var(--color-border)' }}>
-              <div className="skeleton-pulse" style={{ height: '1.1rem', width: `${60 + i * 8}%`, borderRadius: '4px' }} />
+        <div className="hologram-cards-grid">
+          {[1, 2, 3, 4, 5, 6].map(i => (
+            <div key={i} className="cyber-skeleton-card">
+              <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                <div className="cyber-skeleton-pulse" style={{ width: '3.5rem', height: '3.5rem', borderRadius: '50%' }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                  <div className="cyber-skeleton-pulse" style={{ height: '1.2rem', width: '70%' }} />
+                  <div className="cyber-skeleton-pulse" style={{ height: '0.8rem', width: '40%' }} />
+                </div>
+              </div>
+              <div className="cyber-skeleton-pulse" style={{ height: '1.5rem', width: '100%', marginTop: '1rem' }} />
+              <div className="cyber-skeleton-pulse" style={{ height: '1rem', width: '60%', marginTop: '1rem' }} />
             </div>
           ))}
         </div>
       ) : pacientesFiltrados.length === 0 ? (
-        <div className="empty-state" style={{ marginTop: '1rem' }}>
-          <Users size={40} className="empty-state-icon" />
-          <h3>{filtro ? 'Nenhum resultado encontrado' : 'Nenhum paciente cadastrado ainda'}</h3>
+        <div className="cyber-empty-state">
+          <Users size={48} className="cyber-empty-icon" />
+          <h3>{filtro ? 'Sem resultados na rede' : 'Nenhum paciente integrado'}</h3>
           <p>
             {filtro
-              ? `Nenhum paciente encontrado para "${filtro}". Tente outro nome.`
-              : 'Clique em "Novo Paciente" para começar a cadastrar seus pacientes.'}
+              ? `A busca por "${filtro}" não retornou nenhuma assinatura biométrica correspondente.`
+              : 'Comece cadastrando seu primeiro paciente para iniciar o mapeamento metabólico.'}
           </p>
           {!filtro && (
-            <Link to="/pacientes/novo" className="btn-action" style={{ marginTop: '0.5rem' }}>
+            <Link to="/pacientes/novo" className="btn-action btn-cyber-action" style={{ marginTop: '0.5rem' }}>
               <Plus size={18} />
-              Cadastrar primeiro paciente
+              Iniciar Primeiro Cadastro
             </Link>
           )}
         </div>
       ) : (
-        <div className="patients-table">
-          <div className="patients-table-header">
-            <span>Nome</span>
-            <span>Objetivo</span>
-            <span>Última Consulta</span>
-          </div>
-          {pacientesFiltrados.map(paciente => (
-            <Link key={paciente.id} to={`/pacientes/${paciente.id}`} className="patient-row">
-              <span className="patient-row-name">{paciente.nome}</span>
-              <span className="patient-row-goals">{formatarObjetivos(paciente.objetivos)}</span>
-              <span className="patient-row-date">
-                <Calendar size={14} />
-                {paciente.ultimaConsulta ? formatarData(paciente.ultimaConsulta) : 'Sem consultas'}
-              </span>
-              <ChevronRight size={16} style={{ color: 'var(--color-text-light)', gridColumn: '4' }} />
-            </Link>
-          ))}
+        <div className="hologram-cards-grid">
+          {pacientesFiltrados.map(paciente => {
+            // Iniciais do nome
+            const iniciais = paciente.nome
+              .split(' ')
+              .filter(n => n.length > 0)
+              .map(n => n[0])
+              .slice(0, 2)
+              .join('')
+              .toUpperCase();
+
+            return (
+              <Link key={paciente.id} to={`/pacientes/${paciente.id}`} className="hologram-card">
+                <div className="hologram-card-top">
+                  <div className="hologram-patient-avatar">
+                    {iniciais || '?'}
+                  </div>
+                  <div className="hologram-patient-details">
+                    <h3 className="hologram-patient-name">{paciente.nome}</h3>
+                    <div className="hologram-patient-status">
+                      <span className="hologram-patient-status-dot" />
+                      <span>Ativo</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="hologram-card-middle">
+                  <span className="hologram-card-label">Objetivos</span>
+                  <div className="hologram-objectives-chips">
+                    {paciente.objetivos && paciente.objetivos.length > 0 ? (
+                      paciente.objetivos.map((obj, index) => {
+                        let chipClass = '';
+                        let icon = null;
+
+                        const objLower = obj.toLowerCase();
+                        if (objLower.includes('emagrecer') || objLower.includes('alimentar') || objLower.includes('reeducação')) {
+                          chipClass = 'hologram-chip-emagrecer';
+                          icon = <Apple size={12} />;
+                        } else if (objLower.includes('massa') || objLower.includes('esport') || objLower.includes('performance') || objLower.includes('hipertrofia')) {
+                          chipClass = 'hologram-chip-ganhar-massa';
+                          icon = <Dumbbell size={12} />;
+                        } else {
+                          chipClass = 'hologram-chip-saude-geral';
+                          icon = <Heart size={12} />;
+                        }
+
+                        return (
+                          <span key={index} className={`hologram-chip ${chipClass}`}>
+                            {icon}
+                            {obj}
+                          </span>
+                        );
+                      })
+                    ) : (
+                      <span className="hologram-chip">Sem objetivos definidos</span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="hologram-card-bottom">
+                  <div className="hologram-consultation-date">
+                    <Calendar size={14} className="hologram-consultation-icon" />
+                    <span>
+                      {paciente.ultimaConsulta
+                        ? `Último contato: ${formatarData(paciente.ultimaConsulta)}`
+                        : 'Sem consultas'}
+                    </span>
+                  </div>
+                  <ChevronRight className="hologram-card-arrow" size={18} />
+                </div>
+              </Link>
+            );
+          })}
         </div>
       )}
     </main>

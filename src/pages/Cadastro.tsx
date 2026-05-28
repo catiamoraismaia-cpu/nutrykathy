@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { Mail, Lock, User, AlertCircle, Leaf } from 'lucide-react';
+import FruitLoader from '../components/FruitLoader';
 
 export default function Cadastro() {
   const [nome, setNome] = useState('');
@@ -102,6 +103,7 @@ export default function Cadastro() {
 
   return (
     <div className="auth-layout">
+      {isLoading && <FruitLoader mensagem="Criando seu consultório..." />}
       <div className="auth-card glass-panel" style={{ maxWidth: '480px' }}>
         <div className="brand-header">
           <div className="brand-logo">

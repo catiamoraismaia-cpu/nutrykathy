@@ -7,13 +7,14 @@ import Layout from './components/Layout';
 import PacientesListagem from './pages/PacientesListagem';
 import PacientesCadastro from './pages/PacientesCadastro';
 import PacientePerfil from './pages/PacientePerfil';
+import Home from './pages/Home';
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
           
