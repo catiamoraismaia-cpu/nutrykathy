@@ -166,7 +166,7 @@ export default function Dashboard() {
           <span className="action-title">Consulta</span>
         </Link>
 
-        <Link to="#" className="action-card">
+        <Link to="/perfil" className="action-card">
           <div className="action-icon-wrapper">
             <User size={24} />
           </div>

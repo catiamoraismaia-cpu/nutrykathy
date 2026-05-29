@@ -7,6 +7,7 @@ import Layout from './components/Layout';
 import PacientesListagem from './pages/PacientesListagem';
 import PacientesCadastro from './pages/PacientesCadastro';
 import PacientePerfil from './pages/PacientePerfil';
+import PerfilNutricionista from './pages/PerfilNutricionista';
 import Home from './pages/Home';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             <Route path="/pacientes" element={<PacientesListagem />} />
             <Route path="/pacientes/novo" element={<PacientesCadastro />} />
             <Route path="/pacientes/:id" element={<PacientePerfil />} />
+            <Route path="/perfil" element={<PerfilNutricionista />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/login" replace />} />

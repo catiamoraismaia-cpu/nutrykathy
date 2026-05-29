@@ -486,6 +486,7 @@ export default function PacientePerfil() {
   // --- Estados do Calendário e Nutricionista ---
   const [dataCalendario, setDataCalendario] = useState(new Date());
   const [modalNutricionista, setModalNutricionista] = useState(false);
+  const [nutricionista, setNutricionista] = useState<{ nome: string; crm: string | null; especialidades: string | null; email: string } | null>(null);
 
   // --- Estados do WhatsApp / Lembrete ---
   const TEMPLATE_PADRAO_LEMBRETE = `Olá {{nome_paciente}} 😊
@@ -844,6 +845,19 @@ Obrigado 💚`;
       }
 
       setPaciente(dataPac);
+
+      // 1b. Carregar Nutricionista Responsável
+      if (dataPac.nutricionista_id) {
+        const { data: dataNutri, error: errNutri } = await supabase
+          .from('nutricionistas')
+          .select('nome, email, crm, especialidades')
+          .eq('id', dataPac.nutricionista_id)
+          .single();
+        
+        if (!errNutri && dataNutri) {
+          setNutricionista(dataNutri);
+        }
+      }
 
       // Preencher inputs do paciente
       setNome(dataPac.nome || '');
@@ -2786,31 +2800,30 @@ Obrigado 💚`;
               </div>
 
               <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                <h4 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '0 0 0.25rem 0' }}>Kathy Maia</h4>
-                <span style={{ fontSize: '0.85rem', color: 'var(--color-primary-dark)', fontWeight: 700, padding: '0.25rem 0.75rem', background: 'rgba(225, 29, 72, 0.05)', borderRadius: 'var(--radius-full)' }}>
-                  CRN-4 260527
-                </span>
+                <h4 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '0 0 0.25rem 0' }}>{nutricionista?.nome || 'Nutricionista'}</h4>
+                {nutricionista?.crm ? (
+                  <span style={{ fontSize: '0.85rem', color: 'var(--color-primary-dark)', fontWeight: 700, padding: '0.25rem 0.75rem', background: 'rgba(225, 29, 72, 0.05)', borderRadius: 'var(--radius-full)' }}>
+                    {nutricionista.crm}
+                  </span>
+                ) : (
+                  <span style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', fontStyle: 'italic' }}>
+                    Sem registro profissional cadastrado
+                  </span>
+                )}
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 <div className="nutri-info-row">
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span className="nutri-info-label">Especialidade</span>
-                    <span className="nutri-info-value">Nutrição Esportiva e Metabólica</span>
+                    <span className="nutri-info-label">Especialidade(s)</span>
+                    <span className="nutri-info-value">{nutricionista?.especialidades || 'Não informada'}</span>
                   </div>
                 </div>
 
                 <div className="nutri-info-row">
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <span className="nutri-info-label">E-mail de Contato</span>
-                    <span className="nutri-info-value">kathy.nutri@example.com</span>
-                  </div>
-                </div>
-
-                <div className="nutri-info-row">
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span className="nutri-info-label">Telefone / WhatsApp</span>
-                    <span className="nutri-info-value">(11) 98765-4321</span>
+                    <span className="nutri-info-value">{nutricionista?.email || 'Não informado'}</span>
                   </div>
                 </div>
               </div>

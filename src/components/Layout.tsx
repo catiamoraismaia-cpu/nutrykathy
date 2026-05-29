@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate, Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import { LogOut, Leaf, LayoutDashboard, Users } from 'lucide-react';
+import { LogOut, Leaf, LayoutDashboard, Users, User } from 'lucide-react';
 
 export default function Layout() {
   const { session, loading } = useAuth();
@@ -41,6 +41,7 @@ export default function Layout() {
   // Verificar qual link do menu lateral está ativo
   const isDashboardActive = location.pathname === '/dashboard';
   const isPacientesActive = location.pathname.startsWith('/pacientes');
+  const isPerfilActive = location.pathname === '/perfil';
 
   return (
     <div className="dashboard-container">
@@ -65,6 +66,13 @@ export default function Layout() {
           >
             <Users size={20} />
             Pacientes
+          </Link>
+          <Link 
+            to="/perfil" 
+            className={`sidebar-link ${isPerfilActive ? 'active' : ''}`}
+          >
+            <User size={20} />
+            Meu Perfil
           </Link>
         </nav>
 
